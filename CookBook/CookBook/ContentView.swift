@@ -9,13 +9,19 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        HStack {
+            Text("Mes Listes")
+            Spacer()
+            Text("Editer")
+        }.padding()
+        
+        List {
+            ForEach(0..<10) { cpt in
+                ListeRow(nomListe: "Liste \(cpt+1)", nbArticles: cpt+1)
+            }
+        }.navigationTitle("Mes Listes")
+        
+        
     }
 }
 
