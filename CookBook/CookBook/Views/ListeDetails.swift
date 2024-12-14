@@ -8,27 +8,35 @@
 import SwiftUI
 
 struct ListeDetails: View {
+   
+    var liste: Liste
+        
+    init(_ liste: Liste) {
+        self.liste = liste
+    }
+    
     var body: some View {
         HStack {
             Text("Editer")
             Spacer()
-            Text("Nom de la liste").font(.title)
+            Text(liste.name).font(.title)
             Spacer()
-            Text("Actions")
-        }.padding().background(Color.gray)
+            Image("Icons/more-vertical")
+        }.padding().background(Color("FOND-SECONDAIRE"))
         
         Spacer()
         
         HStack {
-            Text("Barre de recherche")
+            SearchBar()
             Spacer()
             Button("+") {
                 
             }
-        }.padding()
+        }.padding().background(Color("FOND-SECONDAIRE"))
     }
 }
 
 #Preview {
-    ListeDetails()
+    var liste = Liste(id:0, name: "Course Maison", articles:[])
+    ListeDetails(liste)
 }

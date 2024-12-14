@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    
+    @StateObject var donnees = DonnesFictives()
     var body: some View {
+        
         HStack {
             Text("Mes Listes")
             Spacer()
@@ -18,8 +19,12 @@ struct ContentView: View {
           
         
         List {
-            ForEach(0..<5) { cpt in
-                ListeRow(nomListe: "Liste \(cpt+1)", nbArticles: .random(in: 1...10))
+            ForEach(donnees.listes) { liste in
+                NavigationLink {
+                    ListeDetails(liste)
+                } label: {
+                    ListeRow(nomListe: "Liste", nbArticles: .random(in: 1...10))
+                }
             }
           
             Button(action: {}) {
