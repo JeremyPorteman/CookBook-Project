@@ -15,10 +15,19 @@ struct Article : Hashable, Codable, Identifiable{
     var name : String
     var description : String
     var categorie : String
+    var imageName : String
     
-    private var imageName : String
-    
-    var image: Image {
+    private var image: Image {
         Image(imageName)
     }
+    
+    var isChecked: Bool = false
 }
+
+let articlesFictifs: [Article] = [
+    Article(id: 1, name: "Banane", description: "Fruit jaune", categorie: "Fruit", imageName: "b"),
+    Article(id: 2, name: "Courgette", description: "Legume vert", categorie: "Légumes", imageName: "c"),
+    Article(id: 3, name: "Stylo", description: "bic classique", categorie: "Bureau", imageName: "s"),
+    Article(id: 4, name: "Lait", description: "lorem ipsum", categorie: "Produits laitiers", imageName: "l"),
+    Article(id: 5, name: "Pizza", description: "lorem ipsum", categorie: "Italie", imageName: "p"),
+]
