@@ -11,6 +11,8 @@ struct ListeDetails: View {
    
     @State var liste: Liste
     @State private var checkedArticles: Set<Int> = []
+    @State private var searchText = ""
+    @State private var isSearchDialogPresented = false
     
     var body: some View {
      
@@ -40,18 +42,28 @@ struct ListeDetails: View {
             }
             .listStyle(.plain)
         }
-        //.padding()
-        //.navigationTitle(liste.name)
         
         Spacer()
         
         HStack {
-            SearchBar()
+            Button(action: {
+                isSearchDialogPresented = true 
+            }) {
+                SearchBar(search: $searchText)
+            }
             Spacer()
             Button("+") {
-                
+                isSearchDialogPresented = true
             }
-        }.padding().background(Color("FOND-SECONDAIRE"))
+            .sheet(isPresented: $isSearchDialogPresented) {
+                SearchDialogView(liste: $liste)
+            }
+        }
+        .padding()
+        .background(Color("FOND-SECONDAIRE"))
+        .sheet(isPresented: $isSearchDialogPresented) {
+            SearchDialogView(liste: $liste)
+        }
     }
     
     // Fonction pour basculer l'état coché

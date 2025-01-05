@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var listes: [Liste] = listesFictives
-    @State private var showAddListSheet = false // Contrôle l'affichage de la feuille modale
+    @State private var showAddListSheet = false // Contrôle l'affichage de la boite de dialogue permettant d'ajouter une nouvelle liste
     @State private var newListName = ""
     
     var body: some View {
@@ -39,14 +39,13 @@ struct ContentView: View {
                     .padding()
                     .background(Color("FOND-SECONDAIRE"))
                     .cornerRadius(10)
-                    .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 5)
                 }
             }
             .navigationTitle("Mes Listes")
         } detail: {
             Text("Sélectionnez une liste")
         }
-        // Feuille modale pour ajouter une nouvelle liste
+        // Boite de dialogue permettant d'ajouter une nouvelle liste
         .sheet(isPresented: $showAddListSheet) {
             VStack {
                 Text("Nouvelle Liste")
@@ -71,8 +70,7 @@ struct ContentView: View {
                         showAddListSheet = false
                         newListName = ""
                     }
-                    .disabled(newListName.isEmpty) // Désactive si le champ est vide
-    
+                    .disabled(newListName.isEmpty) // Désactive le bouton ajouter si le champ est vide
                 }
                 .padding()
             }
