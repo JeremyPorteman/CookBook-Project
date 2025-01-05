@@ -17,6 +17,7 @@ struct ListeDetails: View {
     var body: some View {
      
         VStack {
+            // AFFICHAGE : NOM DE LA LISTE
             HStack {
                 Spacer()
                 Text(liste.name)
@@ -24,7 +25,8 @@ struct ListeDetails: View {
             }
             .padding(5)
             .background(Color("FOND-SECONDAIRE"))
-               
+             
+            // AFFICHAGE DE LA LISTE
             List {
                 ForEach(liste.articles) { article in
                     HStack {
