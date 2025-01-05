@@ -37,6 +37,17 @@ struct ListeDetails: View {
                                 .foregroundColor(checkedArticles.contains(article.id) ? Color("VERT") : .gray)
                         }
                         Text(article.name)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            removeArticle(article)
+                        }) {
+                            Image(systemName: "trash")
+                                .foregroundColor(Color("ROUGE"))
+                        }
+                        .buttonStyle(BorderlessButtonStyle()) // Permet au bouton d'être réactif dans une liste
+                                 
                     }
                 }
             }
@@ -72,6 +83,13 @@ struct ListeDetails: View {
             checkedArticles.remove(article.id)
         } else {
             checkedArticles.insert(article.id)
+        }
+    }
+    
+    // Fonction pour supprimer un article de la liste
+    private func removeArticle(_ article: Article) {
+        if let index = liste.articles.firstIndex(where: { $0.id == article.id }) {
+            liste.articles.remove(at: index)
         }
     }
 }

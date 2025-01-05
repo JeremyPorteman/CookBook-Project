@@ -8,35 +8,28 @@
 import SwiftUI
 
 struct SearchDialogView: View {
-    
     @Binding var liste: Liste
-    @State private var searchQuery = ""
-    @State private var selectedArticles: Set<Int> = []
+    @State private var selectedArticles: Set<Article> = []
     
-    // Regrouper les articles par catégorie
-    var groupedArticles: [String: [Article]] {
+    // Regroupement des articles par catégorie
+    private var groupedArticles: [String: [Article]] {
         Dictionary(grouping: articlesFictifs, by: { $0.categorie })
     }
     
     var body: some View {
         NavigationView {
-            VStack {
-                SearchBar(search: $searchQuery)
-               
-                List {
-                    ForEach(groupedArticles.keys.sorted(), id: \.self) { categorie in
-                        Section(header: Text(categorie).font(.headline)) {
-                            ForEach(groupedArticles[categorie]!.filter {
-                                searchQuery.isEmpty ? true : $0.name.localizedCaseInsensitiveContains(searchQuery)
-                            }) { article in
-                                HStack {
-                                    Button(action: {
-                                        toggleSelection(for: article)
-                                    }) {
-                                        Image(systemName: selectedArticles.contains(article.id) ? "checkmark.circle.fill" : "circle")
-                                            .foregroundColor(selectedArticles.contains(article.id) ? .green : .gray)
-                                    }
-                                    Text(article.name)
+            List {
+                ForEach(groupedArticles.keys.sorted(), id: \.self) { categorie in
+                    Section(header: Text(categorie).font(.headline)) {
+                        ForEach(groupedArticles[categorie] ?? [], id: \.id) { article in
+                            HStack {
+                                Text(article.name)
+                                Spacer()
+                                Button(action: {
+                                    toggleSelection(for: article)
+                                }) {
+                                    Image(systemName: selectedArticles.contains(article) ? "checkmark.square.fill" : "square")
+                                        .foregroundColor(selectedArticles.contains(article) ? Color.green : .gray)
                                 }
                             }
                         }
@@ -59,32 +52,29 @@ struct SearchDialogView: View {
         }
     }
     
-    // ✅ Basculer la sélection d'un article
     private func toggleSelection(for article: Article) {
-        if selectedArticles.contains(article.id) {
-            selectedArticles.remove(article.id)
+        if selectedArticles.contains(article) {
+            selectedArticles.remove(article)
         } else {
-            selectedArticles.insert(article.id)
+            selectedArticles.insert(article)
         }
     }
     
-    // ✅ Ajouter tous les articles sélectionnés
     private func addSelectedArticles() {
-        let newArticles = articlesFictifs.filter { selectedArticles.contains($0.id) }
-        
-        for article in newArticles {
+        for article in selectedArticles {
             if !liste.articles.contains(where: { $0.id == article.id }) {
                 liste.articles.append(article)
             }
         }
-        
-        selectedArticles.removeAll() // Réinitialiser après l'ajout
         dismiss()
     }
     
-    // ✅ Fermer la boîte de dialogue
+    
+    // Fermer la boîte de dialogue
     private func dismiss() {
-        UIApplication.shared.windows.first?.rootViewController?.dismiss(animated: true)
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            windowScene.windows.first?.rootViewController?.dismiss(animated: true, completion: nil)
+        }
     }
 }
 
