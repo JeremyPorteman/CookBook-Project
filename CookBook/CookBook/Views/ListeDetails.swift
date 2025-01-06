@@ -28,7 +28,7 @@ struct ListeDetails: View {
                 Spacer()
                 
                 // Bouton Menu
-               Menu {
+                Menu {
                    Button(action: {
                        isRenameDialogPresented = true
                        newListName = liste.name

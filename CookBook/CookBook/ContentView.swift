@@ -94,11 +94,11 @@ struct ContentView: View {
     }
     
     // Fonction pour supprimer une liste
-        private func supprimerListe(_ liste: Liste) {
-            if let index = listes.firstIndex(where: { $0.id == liste.id }) {
-                listes.remove(at: index)
-            }
+    private func supprimerListe(_ liste: Liste) {
+        if let index = listes.firstIndex(where: { $0.id == liste.id }) {
+            listes.remove(at: index)
         }
+    }
 }
 
 #Preview {
