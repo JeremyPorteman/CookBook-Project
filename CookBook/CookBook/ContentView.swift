@@ -18,7 +18,12 @@ struct ContentView: View {
             List {
                 ForEach(listes) { liste in
                     NavigationLink {
-                        ListeDetails(liste: liste)
+                        ListeDetails(
+                            liste: liste,
+                            onDelete: { listeToDelete in
+                                supprimerListe(listeToDelete)
+                            }
+                        )
                     } label: {
                         ListeRow(liste: liste)
                     }
@@ -87,6 +92,13 @@ struct ContentView: View {
         )
         listes.append(nouvelleListe)
     }
+    
+    // Fonction pour supprimer une liste
+        private func supprimerListe(_ liste: Liste) {
+            if let index = listes.firstIndex(where: { $0.id == liste.id }) {
+                listes.remove(at: index)
+            }
+        }
 }
 
 #Preview {
