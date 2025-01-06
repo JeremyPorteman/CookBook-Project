@@ -12,6 +12,10 @@ struct SearchDialogView: View {
     @Binding var liste: Liste
     @State private var searchQuery = ""
     @State private var selectedArticles: Set<Int> = []
+    @State private var newArticleName: String = ""
+    @State private var newArticleDescription: String = ""
+    @State private var selectedCategoryForNewArticle: String = ""
+    @State private var isAddingNewArticle = false
     
     // Regrouper les articles par catégorie
     var groupedArticles: [String: [Article]] {
@@ -26,18 +30,40 @@ struct SearchDialogView: View {
                 
                 List {
                     ForEach(groupedArticles.keys.sorted(), id: \.self) { categorie in
-                        Section(header: Text(categorie).font(.headline)) {
+                        Section(header: HStack {
+                            Text(categorie).font(.headline)
+                            Spacer()
+                            Button(action: {
+                                selectedCategoryForNewArticle = categorie
+                                isAddingNewArticle = true
+                            }) {
+                                Image(systemName: "plus.circle")
+                                    .foregroundColor(Color("VERT"))
+                            }
+                        }) {
                             ForEach(groupedArticles[categorie]!.filter {
                                 searchQuery.isEmpty ? true : $0.name.localizedCaseInsensitiveContains(searchQuery)
                             }) { article in
                                 HStack {
-                                    Button(action: {
-                                        toggleSelection(for: article)
-                                    }) {
-                                        Image(systemName: selectedArticles.contains(article.id) ? "checkmark.circle.fill" : "circle")
-                                            .foregroundColor(selectedArticles.contains(article.id) ? .green : .gray)
+                                    VStack (alignment: .leading){
+                                        HStack {
+                                            Button(action: {
+                                                toggleSelection(for: article)
+                                            }) {
+                                                Image(systemName: selectedArticles.contains(article.id) ? "checkmark.circle.fill" : "circle")
+                                                    .foregroundColor(selectedArticles.contains(article.id) ? Color("VERT") : .gray)
+                                            }
+                                            Text(article.name)
+                                            Spacer()
+                                            
+                                                                                }
+                                        Text(article.description).font(.subheadline).foregroundColor(.gray)
                                     }
-                                    Text(article.name)
+                                    Image("Images-item/\(article.imageName)")
+                                        .resizable()
+                                        .frame(width: 50, height: 50)
+                                        .background(Color("VERT"))
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
                                 }
                             }
                         }
@@ -57,7 +83,14 @@ struct SearchDialogView: View {
                     }
                 }
             }
-        }
+        }.alert("Nouvel article", isPresented: $isAddingNewArticle, actions: {
+            TextField("Nom de l'article", text: $newArticleName)
+            TextField("Description de l'article", text: $newArticleDescription)
+            Button("Ajouter", action: addNewArticle)
+            Button("Annuler", role: .cancel, action: {})
+        }, message: {
+            Text("Entrez le nom d'un nouvel article pour \(selectedCategoryForNewArticle).")
+        })
     }
     
     // Fonction pour basculer la sélection des articles
@@ -76,6 +109,22 @@ struct SearchDialogView: View {
         dismiss()
     }
     
+    // Ajouter un nouvel article
+    func addNewArticle() {
+        // Vérifier que le champs nom n'est pas vide
+        guard !newArticleName.isEmpty else { return }
+        
+        let newId = articlesFictifs.count + 1
+        let newArticle = Article(id: newId, name: newArticleName, description: newArticleDescription, categorie: selectedCategoryForNewArticle, imageName:"")
+        
+        liste.articles.append(newArticle)
+        articlesFictifs.append(newArticle) // Optionnel : Ajouter dans les articles fictifs globaux
+        
+        newArticleName = ""
+        selectedCategoryForNewArticle = ""
+    }
+    
+
     // Fermer la boîte de dialogue
     private func dismiss() {
         UIApplication.shared.windows.first?.rootViewController?.dismiss(animated: true)

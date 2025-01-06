@@ -20,7 +20,7 @@ struct ListeDetails: View {
             // AFFICHAGE : NOM DE LA LISTE
             HStack {
                 Spacer()
-                Text(liste.name)
+                Text(liste.name).font(.headline)
                 Spacer()
             }
             .padding(5)
