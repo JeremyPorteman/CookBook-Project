@@ -29,7 +29,7 @@ struct ListeRow: View {
 }
 
 #Preview {
-    var articles: [Article] = articlesFictifs
+    var articles: [Article] = Article()
     
     ListeRow(liste: Liste(id:1, name: "Liste1", articles: articles))
 }

@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct CookBookApp: App {
+    let persistentContainer = CoreDataManager.shared.persistentContainer
+
     var body: some Scene {
         WindowGroup {
             ContentView()
